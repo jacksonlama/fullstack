@@ -1,0 +1,30 @@
+version: '3.8'
+# This specifies the version of the Docker Compose file format we're using.
+
+services:
+  frontend:
+    build: ./frontend
+    # Tells Docker Compose to build the image using the Dockerfile in the frontend folder
+    container_name: frontend
+    # Sets a name for the container (optional but helpful for logs and debugging)
+    restart: always
+    # Automatically restart the container if it crashes or the system reboots
+
+  backend:
+    build: ./backend
+    # Builds the backend container from the Dockerfile in the backend folder
+    container_name: backend
+    restart: always
+    # Ensures reliability if the container goes down
+
+  nginx:
+    build: ./nginx
+    # Builds the nginx container from the nginx folder (uses default.conf and Dockerfile)
+    container_name: nginx
+    ports:
+      - "8000:80"
+      # Maps port 80 on your machine to port 80 in the container (so you can access it in the browser)
+    depends_on:
+      - frontend
+      - backend
+      # This ensures nginx only starts after frontend and backend containers are running
